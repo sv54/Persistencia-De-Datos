@@ -6,6 +6,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Gravity
 import android.view.MenuItem
+import android.view.MotionEvent
+import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
@@ -17,8 +20,10 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var drawerLayout: DrawerLayout
     private lateinit var navigationView: NavigationView
+    private lateinit var inputMethodManager: InputMethodManager
     lateinit var preview: Button
     lateinit var close: Button
+    val drawerUtil = DrawerUtil()
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -26,12 +31,12 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.title = "Main"
 
         drawerLayout = findViewById(R.id.drawerLayout)
-        navigationView = findViewById(R.id.navigationView)
+        inputMethodManager = getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager
         preview = findViewById<Button>(R.id.preview)
         close = findViewById<Button>(R.id.close)
 
         preview.setOnClickListener {
-
+            hideKeyboard()
         }
 
         close.setOnClickListener {
@@ -39,50 +44,20 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Configurar el ActionBarDrawerToggle
-        val toggle = ActionBarDrawerToggle(
-            this, drawerLayout, R.string.open_drawer, R.string.close_drawer
-        )
-        drawerLayout.addDrawerListener(toggle)
-        toggle.syncState()
-
-        // Configurar el icono en la barra de acción para abrir el drawer
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
-        // Manejar clics en elementos del NavigationView
-        navigationView.setNavigationItemSelectedListener { menuItem ->
-            when (menuItem.itemId) {
-                R.id.menu_item_1 -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
-                    finish()
-                    // Acción para el primer elemento del menú
-                    // Puedes realizar acciones o cambiar de fragmento/actividad aquí
-                    true
-                }
-                R.id.menu_item_2 -> {
-                    val intent = Intent(this, Settings::class.java)
-                    startActivity(intent)
-
-                    true
-                }
-                // Agrega más casos según tus necesidades
-
-                else -> false
-            }
-        }
+        drawerUtil.setupDrawer(this)
     }
 
     // Manejar clics en el icono de la barra de acción para abrir el drawer
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            if (drawerLayout.isDrawerOpen(GravityCompat.START)) {
-                drawerLayout.closeDrawer(GravityCompat.START)
-            } else {
-                drawerLayout.openDrawer(GravityCompat.START)
-            }
-            return true
-        }
-        return super.onOptionsItemSelected(item)
+        return drawerUtil.onOptionsItemSelected(item, drawerLayout) || super.onOptionsItemSelected(item)
     }
 
+
+    //MOVERLO A DRAWEEUTIL
+    private fun hideKeyboard() {
+        val currentFocusView: View? = currentFocus
+        currentFocusView?.let {
+            inputMethodManager.hideSoftInputFromWindow(it.windowToken, 0)
+        }
+    }
 }
