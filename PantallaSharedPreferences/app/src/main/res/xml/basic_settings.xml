@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:defaultValue="40"
+        android:title="Size"
+        app:key="list_preferences_size"
+        app:summary="%s" />
+
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="FG color"
+        app:entries="@array/coloresNombres"
+        app:entryValues="@array/coloresNombres"
+        app:key="fb_color"
+        app:summary="%s" />
+    <ListPreference
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:title="BG color"
+        app:entries="@array/coloresNombres"
+        app:entryValues="@array/coloresNombres"
+        app:key="bg_color"
+        app:summary="%s" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_bold"
+        android:title="Bold" />
+    <SwitchPreference
+        android:defaultValue="false"
+        android:key="switch_preference_italic"
+        android:title="Italic" />
+</PreferenceScreen>

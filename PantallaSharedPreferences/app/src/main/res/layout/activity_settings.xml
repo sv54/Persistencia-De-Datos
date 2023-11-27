@@ -7,21 +7,20 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Settings">
-    <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/content2"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         tools:context=".Settings">
-
     </androidx.constraintlayout.widget.ConstraintLayout>
+
     <!-- Menú lateral (NavigationView) -->
-<com.google.android.material.navigation.NavigationView
-android:id="@+id/navigationView"
-android:layout_width="wrap_content"
-android:layout_height="match_parent"
-android:layout_gravity="start"
-app:headerLayout="@layout/nav_header"
-app:menu="@menu/nav_menu" />
+    <com.google.android.material.navigation.NavigationView
+    android:id="@+id/navigationView"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_gravity="start"
+    app:headerLayout="@layout/nav_header"
+    app:menu="@menu/nav_menu" />
 
 </androidx.drawerlayout.widget.DrawerLayout>
