@@ -1,7 +1,12 @@
 package com.example.pantallapreferences
 
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.view.MenuItem
+import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
@@ -12,6 +17,7 @@ class DrawerUtil {
     fun setupDrawer(activity: AppCompatActivity) {
         val drawerLayout: DrawerLayout = activity.findViewById(R.id.drawerLayout)
         val navigationView: NavigationView = activity.findViewById(R.id.navigationView)
+
 
         val toggle = ActionBarDrawerToggle(
             activity,
@@ -27,14 +33,17 @@ class DrawerUtil {
         navigationView.setNavigationItemSelectedListener { menuItem ->
             when (menuItem.itemId) {
                 R.id.menu_item_1 -> {
-                    val intent = Intent(activity, MainActivity::class.java)
-                    activity.startActivity(intent)
-                    activity.finish()
+                        val intent = Intent(activity, MainActivity::class.java)
+                        activity.startActivity(intent)
+                        activity.finish()
+                        drawerLayout.closeDrawer(GravityCompat.START)
+
                     true
                 }
                 R.id.menu_item_2 -> {
                     val intent = Intent(activity, Settings::class.java)
                     activity.startActivity(intent)
+                    drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
                 // Agrega más casos según tus necesidades
@@ -54,5 +63,12 @@ class DrawerUtil {
             return true
         }
         return false
+    }
+
+    fun isActivityInStack(context: Context, cls: Class<*>): Boolean {
+        val intent = Intent(context, cls)
+        val activities = context.packageManager.queryIntentActivities(intent, PackageManager.MATCH_DEFAULT_ONLY)
+
+        return activities.isNotEmpty()
     }
 }

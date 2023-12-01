@@ -33,9 +33,18 @@ class MainActivity : AppCompatActivity() {
     lateinit var editText: EditText
     val drawerUtil = DrawerUtil()
     lateinit var prefs: SharedPreferences
+    lateinit var mostrar: TextView
+
+
+    override fun onResume() {
+        super.onResume()
+        mostrar.visibility = View.INVISIBLE
+
+    }
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        mostrar = findViewById<TextView>(R.id.mostrar)
 
 
 
@@ -47,7 +56,6 @@ class MainActivity : AppCompatActivity() {
         close = findViewById<Button>(R.id.close)
         editText = findViewById(R.id.writeSomething)
         editText.setText("Texto por defecto")
-        val mostrar = findViewById<TextView>(R.id.mostrar)
         mostrar.visibility = View.INVISIBLE
 
         preview.setOnClickListener {
@@ -55,13 +63,13 @@ class MainActivity : AppCompatActivity() {
 
 
             prefs = PreferenceManager.getDefaultSharedPreferences(this)
-            val bgColor = prefs.getString("bg_color", "default")
-            val fbColor = prefs.getString("fb_color", "default")
+            val bgColor = prefs.getString("bg_color", "white")
+            val fbColor = prefs.getString("fb_color", "black")
             val fontSize = prefs.getString("list_preferences_size", "default")
             val bold = prefs.getBoolean("switch_preference_bold", false)
             val italic = prefs.getBoolean("switch_preference_italic", false)
             val rotacion = prefs.getInt("rotation_preference", 0)
-            val alpha = prefs.getInt("alpha_preference", 0)
+            val alpha = prefs.getInt("alpha_preference", 100)
             mostrar.setBackgroundColor(resources.getColor(resources.getIdentifier(bgColor, "color", packageName)))
             mostrar.setTextColor(resources.getColor(resources.getIdentifier(fbColor, "color", packageName)))
             mostrar.text = editText.text.toString()
@@ -89,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         close.setOnClickListener {
-            finish()
+            finishAffinity()
         }
 
         // Configurar el ActionBarDrawerToggle
