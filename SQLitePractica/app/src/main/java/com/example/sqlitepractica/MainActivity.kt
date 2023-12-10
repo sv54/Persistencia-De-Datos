@@ -8,6 +8,7 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -46,25 +47,47 @@ class MainActivity : AppCompatActivity() {
             finishAffinity()
         }
 
+        loginButton.setOnClickListener {
+            login()
+        }
+
         db = dbHelper.writableDatabase
 
 
     }
 
+    fun login(){
+        val username = editUsername.text.toString()
+        val password = editPassword.text.toString()
 
+        val selectUserQuery = "SELECT * FROM ${DatabaseHelper.TABLE_NAME} WHERE ${DatabaseHelper.COLUMN_NOMBRE}=? AND ${DatabaseHelper.COLUMN_PASSWORD}=?"
+        val selectionArgs = arrayOf(username, password)
 
-    private fun insertarUsuario(db: SQLiteDatabase, nombreUsuario: String, password: String, nombreCompleto: String, email: String) {
-        // Crear un ContentValues con los valores a insertar
-        val values = ContentValues().apply {
-            put(DatabaseHelper.COLUMN_NOMBRE, nombreUsuario)
-            put(DatabaseHelper.COLUMN_PASSWORD, password)
-            put(DatabaseHelper.COLUMN_NOMBRE_COMPLETO, nombreCompleto)
-            put(DatabaseHelper.COLUMN_EMAIL, email)
+        val cursor = db.rawQuery(selectUserQuery, selectionArgs)
+
+        try {
+            if (cursor.moveToFirst()) {
+                val columnIndexFullName = cursor.getColumnIndex(DatabaseHelper.COLUMN_NOMBRE_COMPLETO)
+                if (columnIndexFullName != -1 ) {
+                    intent = Intent(this, UserDataActivity::class.java)
+                    val nombreCompleto = cursor.getString(columnIndexFullName)
+                    intent.putExtra("NOMBRECOMPLETO", nombreCompleto)
+                    intent.putExtra("USERNAME", username)
+                    startActivity(intent)
+                }
+
+            } else {
+                Toast.makeText(this, "Error usuario/password incorrectos", Toast.LENGTH_SHORT).show()
+            }
+        } finally {
+            // Cerrar el cursor después de usarlo
+            cursor.close()
         }
 
-        // Insertar el nuevo usuario en la tabla
-        db.insert(DatabaseHelper.TABLE_NAME, null, values)
     }
+
+
+
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_bar_menu, menu)
@@ -94,9 +117,9 @@ class MainActivity : AppCompatActivity() {
 
                     if (dbHelper.restoreDatabase()) {
 
-                        Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Restore exitoso", Toast.LENGTH_SHORT).show()
                     } else {
-                        Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
+                        Toast.makeText(this, "Error al realizar el restore", Toast.LENGTH_SHORT).show()
                     }
                 }
                 return true
@@ -136,6 +159,19 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
+    }
+
+    private fun insertarUsuario(db: SQLiteDatabase, nombreUsuario: String, password: String, nombreCompleto: String, email: String) {
+        // Crear un ContentValues con los valores a insertar
+        val values = ContentValues().apply {
+            put(DatabaseHelper.COLUMN_NOMBRE, nombreUsuario)
+            put(DatabaseHelper.COLUMN_PASSWORD, password)
+            put(DatabaseHelper.COLUMN_NOMBRE_COMPLETO, nombreCompleto)
+            put(DatabaseHelper.COLUMN_EMAIL, email)
+        }
+
+        // Insertar el nuevo usuario en la tabla
+        db.insert(DatabaseHelper.TABLE_NAME, null, values)
     }
 
 }
