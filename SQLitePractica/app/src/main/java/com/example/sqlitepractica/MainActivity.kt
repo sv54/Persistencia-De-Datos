@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var editPassword: EditText
     val dbHelper = DatabaseHelper(this)
     var checkExternalStorage = false
+    lateinit var db: SQLiteDatabase
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,6 +46,7 @@ class MainActivity : AppCompatActivity() {
             finishAffinity()
         }
 
+        db = dbHelper.writableDatabase
 
 
     }
@@ -72,10 +74,8 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
             R.id.action_createBackUp -> {
-                val db = dbHelper.writableDatabase
 
                 // Realizar operaciones en la base de datos (ejemplo: insertar un usuario)
-                insertarUsuario(db, "UsuarioPrueba", "123456", "Nombre Completo", "usuario@dominio.com")
                 if (checkPermisos()){
                     if (dbHelper.backupDatabase()) {
                         Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
@@ -88,9 +88,22 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_restoreBackUp -> {
+                if (checkPermisos()){
+
+//                    insertarUsuario(db, "Restoring", "123456", "Nombre Completo", "usuario@dominio.com")
+
+                    if (dbHelper.restoreDatabase()) {
+
+                        Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
+                    }
+                }
                 return true
             }
             R.id.action_ManageUsers -> {
+                insertarUsuario(db, "AntesDeRestore", "123456", "Nombre Completo", "usuario@dominio.com")
+
                 return true
             }
             /*android.R.id.home -> {

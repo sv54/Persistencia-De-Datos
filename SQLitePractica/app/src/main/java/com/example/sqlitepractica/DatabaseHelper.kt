@@ -4,6 +4,8 @@ import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.os.Environment
+import android.util.Log
+import android.widget.Toast
 import java.io.File
 import java.io.FileInputStream
 import java.io.FileOutputStream
@@ -37,7 +39,7 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, D
 
     fun backupDatabase(): Boolean {
         val currentDBPath = context.getDatabasePath(DATABASE_NAME).absolutePath
-        val backupDBPath = File(Environment.getExternalStorageDirectory(), DATABASE_NAME)
+        val backupDBPath = File(context.getExternalFilesDir(null), DATABASE_NAME)
 
         try {
             val src = FileInputStream(currentDBPath).channel
@@ -48,6 +50,27 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, D
             return true
         } catch (e: IOException) {
             e.printStackTrace()
+            return false
+        }
+    }
+
+    fun restoreDatabase(): Boolean {
+        val externalFile = File(context.getExternalFilesDir(null), DATABASE_NAME)
+        val internalFile = context.getDatabasePath("midb")
+        Log.i("tagg", context.getExternalFilesDir(null)!!.path)
+        Log.i("tagg", context.getDatabasePath("midb").path)
+
+
+        try {
+            val src = FileInputStream(externalFile).channel
+            val dst = FileOutputStream(internalFile).channel
+            dst.transferFrom(src, 0, src.size())
+            src.close()
+            dst.close()
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Error al copiar el archivo
             return false
         }
     }
