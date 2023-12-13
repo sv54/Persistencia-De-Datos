@@ -52,7 +52,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         db = dbHelper.writableDatabase
-
+        DatabaseHelper.DatabaseSingleton.db = db
 
     }
 
@@ -125,8 +125,9 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_ManageUsers -> {
-                insertarUsuario(db, "AntesDeRestore", "123456", "Nombre Completo", "usuario@dominio.com")
-
+//                insertarUsuario(db, "AntesDeRestore", "123456", "Nombre Completo", "usuario@dominio.com")
+                intent = Intent(this, UserManagerActivity::class.java)
+                startActivity(intent)
                 return true
             }
             /*android.R.id.home -> {
@@ -161,17 +162,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun insertarUsuario(db: SQLiteDatabase, nombreUsuario: String, password: String, nombreCompleto: String, email: String) {
-        // Crear un ContentValues con los valores a insertar
-        val values = ContentValues().apply {
-            put(DatabaseHelper.COLUMN_NOMBRE, nombreUsuario)
-            put(DatabaseHelper.COLUMN_PASSWORD, password)
-            put(DatabaseHelper.COLUMN_NOMBRE_COMPLETO, nombreCompleto)
-            put(DatabaseHelper.COLUMN_EMAIL, email)
-        }
 
-        // Insertar el nuevo usuario en la tabla
-        db.insert(DatabaseHelper.TABLE_NAME, null, values)
-    }
 
 }

@@ -4,28 +4,28 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".UpdateUserActivity">
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editUsername"
+    <EditText
+        android:id="@+id/loginEditUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="44dp"
+        android:layout_marginTop="36dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
-        android:hint="User Name"
+        android:hint="Login"
         android:inputType="text"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <androidx.appcompat.widget.AppCompatEditText
-        android:id="@+id/editPassword"
+    <EditText
+        android:id="@+id/passwordEditUpdate"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="39dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="16dp"
         android:ems="10"
         android:hint="Password"
@@ -33,25 +33,39 @@
         android:password="true"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editUsername" />
+        app:layout_constraintTop_toBottomOf="@+id/loginEditUpdate" />
+
+    <EditText
+        android:id="@+id/userNameEditUpdate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="48dp"
+        android:layout_marginEnd="16dp"
+        android:hint="User Name"
+        android:ems="10"
+        android:inputType="text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/passwordEditUpdate" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/login"
+        android:id="@+id/updateUserButton2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="158dp"
-        android:layout_marginTop="47dp"
-        android:text="Login"
+        android:layout_marginStart="148dp"
+        android:layout_marginTop="48dp"
+        android:text="Update User"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editPassword" />
+        app:layout_constraintTop_toBottomOf="@+id/userNameEditUpdate" />
 
     <androidx.appcompat.widget.AppCompatButton
-        android:id="@+id/close"
+        android:id="@+id/backButton4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="160dp"
-        android:layout_marginBottom="70dp"
-        android:text="Close"
+        android:layout_marginBottom="64dp"
+        android:text="Back"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
