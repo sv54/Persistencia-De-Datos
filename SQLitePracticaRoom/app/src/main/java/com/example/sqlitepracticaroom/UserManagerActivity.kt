@@ -10,120 +10,84 @@ import android.os.Environment
 import android.provider.Settings
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.ArrayAdapter
 import android.widget.Button
 import android.widget.EditText
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 
 class UserManagerActivity : AppCompatActivity() {
-    lateinit var closeButton: Button
-    lateinit var loginButton: Button
-    lateinit var editUsername: EditText
-    lateinit var editPassword: EditText
-    var checkExternalStorage = false
-    lateinit var db: SQLiteDatabase
-
+    var usuarios: MutableList<String> = mutableListOf()
+    lateinit var spinner: Spinner
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_user_manager)
 
-        closeButton = findViewById<Button>(R.id.close)
-        loginButton = findViewById(R.id.login)
-        editUsername = findViewById(R.id.editUsername)
-        editPassword = findViewById(R.id.editPassword)
+        actionBar?.title = "User Manageement"
 
-        val actionBar: ActionBar? = supportActionBar
-        actionBar?.title = "SQLite"
+        val newUserButton = findViewById<Button>(R.id.newUserButton)
+        val updateUserButton = findViewById<Button>(R.id.updateUserButton)
+        val deleteUserButton = findViewById<Button>(R.id.deleteUserButton)
+        val listUsersButton = findViewById<Button>(R.id.listUsersButton)
+        val backButton = findViewById<Button>(R.id.backButton2)
 
 
 
-        closeButton.setOnClickListener {
+        newUserButton.setOnClickListener {
+            intent = Intent(this, NewUserActivity::class.java)
+            startActivity(intent)
+        }
+
+        updateUserButton.setOnClickListener {
+            intent = Intent(this, UpdateUserActivity::class.java)
+            intent.putExtra("USERNAME", spinner.selectedItem.toString())
+            startActivity(intent)
+        }
+
+
+        deleteUserButton.setOnClickListener {
+            val usuarioSeleccionado = spinner.selectedItem.toString()
+
+            AlertDialog.Builder(this)
+                .setTitle("Confirmación")
+                .setMessage("¿Estás seguro de que deseas eliminar al usuario $usuarioSeleccionado?")
+                .setPositiveButton("Eliminar") { dialog, which ->
+                    /*val deleteQuery = "DELETE FROM ${DatabaseHelper.TABLE_NAME} WHERE ${DatabaseHelper.COLUMN_NOMBRE} = '$usuarioSeleccionado'"
+                    db.execSQL(deleteQuery)
+                    usuarios.remove(usuarioSeleccionado)*/
+                    (spinner.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                }
+                .setNegativeButton("Cancelar", null)
+                .show()
+        }
+
+        listUsersButton.setOnClickListener {
+            intent = Intent(this, ListUserActivity::class.java)
+            startActivity(intent)
+        }
+
+
+
+        backButton.setOnClickListener {
             finish()
-            finishAffinity()
-        }
-
-        loginButton.setOnClickListener {
-            login()
-        }
-
-    }
-
-    fun login(){
-
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.action_bar_menu, menu)
-        return true
-    }
-
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when (item.itemId) {
-            R.id.action_createBackUp -> {
-
-                // Realizar operaciones en la base de datos (ejemplo: insertar un usuario)
-                if (checkPermisos()){
-                    /*if (dbHelper.backupDatabase()) {
-                        Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
-                    }*/
-                }
-                // Realizar el respaldo de la base de datos
-
-                return true
-            }
-            R.id.action_restoreBackUp -> {
-                if (checkPermisos()){
-
-//                    insertarUsuario(db, "Restoring", "123456", "Nombre Completo", "usuario@dominio.com")
-
-                   /* if (dbHelper.restoreDatabase()) {
-
-                        Toast.makeText(this, "Restore exitoso", Toast.LENGTH_SHORT).show()
-                    } else {
-                        Toast.makeText(this, "Error al realizar el restore", Toast.LENGTH_SHORT).show()
-                    }*/
-                }
-                return true
-            }
-            R.id.action_ManageUsers -> {
-//                insertarUsuario(db, "AntesDeRestore", "123456", "Nombre Completo", "usuario@dominio.com")
-                intent = Intent(this, UserManagerActivity::class.java)
-                startActivity(intent)
-                return true
-            }
-            /*android.R.id.home -> {
-                return true
-            }*/
-            else -> return super.onOptionsItemSelected(item)
         }
     }
 
-    protected fun checkPermisos(): Boolean {
-        return if (Build.VERSION.SDK_INT >= 30) {
-            if (Environment.isExternalStorageManager() == false) {
-                val uri = Uri.parse("package:" + "com.example.sqlitepractica")
-                startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
-                checkExternalStorage = true
-                false
-            } else {
-                true
-            }
-        } else true
+    override fun onResume() {
+        super.onResume()
+        usuarios = mutableListOf()
+        cargarUsuarios()
+
+        spinner = findViewById(R.id.selectUser)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, usuarios)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        spinner.adapter = adapter
+
     }
 
-    override fun onRestart() {
-        super.onRestart()
-        if (Build.VERSION.SDK_INT >= 30) {
-            if (checkExternalStorage) {
-                checkExternalStorage = false
-                if (Environment.isExternalStorageManager()) {
-                    //moverAInternal();
-                }
-            }
-        }
+    fun cargarUsuarios(){
     }
 }

@@ -65,7 +65,7 @@ class MainActivity : AppCompatActivity() {
             prefs = PreferenceManager.getDefaultSharedPreferences(this)
             val bgColor = prefs.getString("bg_color", "white")
             val fbColor = prefs.getString("fb_color", "black")
-            val fontSize = prefs.getString("list_preferences_size", "default")
+            val fontSize = prefs.getString("list_preferences_size", "24.0")
             val bold = prefs.getBoolean("switch_preference_bold", false)
             val italic = prefs.getBoolean("switch_preference_italic", false)
             val rotacion = prefs.getInt("rotation_preference", 0)
@@ -104,13 +104,10 @@ class MainActivity : AppCompatActivity() {
         drawerUtil.setupDrawer(this)
     }
 
-    // Manejar clics en el icono de la barra de acción para abrir el drawer
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return drawerUtil.onOptionsItemSelected(item, drawerLayout) || super.onOptionsItemSelected(item)
     }
 
-
-    //MOVERLO A DRAWEEUTIL
     private fun hideKeyboard() {
         val currentFocusView: View? = currentFocus
         currentFocusView?.let {
