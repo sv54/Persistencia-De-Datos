@@ -13,6 +13,21 @@
         android:theme="@style/Theme.SQLitePracticaRoom"
         tools:targetApi="31">
         <activity
+            android:name=".UserManagerActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UserDataActivity"
+            android:exported="false" />
+        <activity
+            android:name=".UpdateUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".NewUserActivity"
+            android:exported="false" />
+        <activity
+            android:name=".ListUserActivity"
+            android:exported="false" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>

@@ -1,9 +1,10 @@
-package com.example.sqliteroom
+package com.example.sqlitepracticaroom
 
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
 import android.os.Build
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
@@ -13,15 +14,12 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
-import androidx.appcompat.app.AppCompatActivity
 
-class MainActivity : AppCompatActivity() {
-
+class UserManagerActivity : AppCompatActivity() {
     lateinit var closeButton: Button
     lateinit var loginButton: Button
     lateinit var editUsername: EditText
     lateinit var editPassword: EditText
-    val dbHelper = DatabaseHelper(this)
     var checkExternalStorage = false
     lateinit var db: SQLiteDatabase
 
@@ -49,48 +47,17 @@ class MainActivity : AppCompatActivity() {
             login()
         }
 
-        db = dbHelper.writableDatabase
-        DatabaseHelper.DatabaseSingleton.db = db
-
     }
 
     fun login(){
-        val username = editUsername.text.toString()
-        val password = editPassword.text.toString()
-
-        val selectUserQuery = "SELECT * FROM ${DatabaseHelper.TABLE_NAME} WHERE ${DatabaseHelper.COLUMN_NOMBRE}=? AND ${DatabaseHelper.COLUMN_PASSWORD}=?"
-        val selectionArgs = arrayOf(username, password)
-
-        val cursor = db.rawQuery(selectUserQuery, selectionArgs)
-
-        try {
-            if (cursor.moveToFirst()) {
-                val columnIndexFullName = cursor.getColumnIndex(DatabaseHelper.COLUMN_NOMBRE_COMPLETO)
-                if (columnIndexFullName != -1 ) {
-                    intent = Intent(this, UserDataActivity::class.java)
-                    val nombreCompleto = cursor.getString(columnIndexFullName)
-                    intent.putExtra("NOMBRECOMPLETO", nombreCompleto)
-                    intent.putExtra("USERNAME", username)
-                    startActivity(intent)
-                }
-
-            } else {
-                Toast.makeText(this, "Error usuario/password incorrectos", Toast.LENGTH_SHORT).show()
-            }
-        } finally {
-            // Cerrar el cursor después de usarlo
-            cursor.close()
-        }
 
     }
-
-
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.action_bar_menu, menu)
         return true
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -98,11 +65,11 @@ class MainActivity : AppCompatActivity() {
 
                 // Realizar operaciones en la base de datos (ejemplo: insertar un usuario)
                 if (checkPermisos()){
-                    if (dbHelper.backupDatabase()) {
+                    /*if (dbHelper.backupDatabase()) {
                         Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
                 // Realizar el respaldo de la base de datos
 
@@ -113,12 +80,12 @@ class MainActivity : AppCompatActivity() {
 
 //                    insertarUsuario(db, "Restoring", "123456", "Nombre Completo", "usuario@dominio.com")
 
-                    if (dbHelper.restoreDatabase()) {
+                   /* if (dbHelper.restoreDatabase()) {
 
                         Toast.makeText(this, "Restore exitoso", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "Error al realizar el restore", Toast.LENGTH_SHORT).show()
-                    }
+                    }*/
                 }
                 return true
             }
@@ -159,7 +126,4 @@ class MainActivity : AppCompatActivity() {
             }
         }
     }
-
-
-
 }

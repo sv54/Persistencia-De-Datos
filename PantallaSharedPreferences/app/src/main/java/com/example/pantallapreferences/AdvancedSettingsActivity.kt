@@ -12,8 +12,5 @@ class AdvancedSettingsActivity : PreferenceFragmentCompat() {
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.advanced_settings, rootKey)
-
-
-
     }
 }
