@@ -1,10 +1,12 @@
 package com.example.sqliteroom
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.sqliteroom.R
 import com.example.sqliteroom.DatabaseHelper.Companion.COLUMN_NOMBRE
 import com.example.sqliteroom.DatabaseHelper.Companion.COLUMN_NOMBRE_COMPLETO
 import com.example.sqliteroom.DatabaseHelper.Companion.TABLE_NAME

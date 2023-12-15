@@ -46,8 +46,6 @@ class DrawerUtil {
                     drawerLayout.closeDrawer(GravityCompat.START)
                     true
                 }
-                // Agrega más casos según tus necesidades
-
                 else -> false
             }
         }

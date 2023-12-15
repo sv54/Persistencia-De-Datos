@@ -40,7 +40,6 @@ class Settings : AppCompatActivity() {
             }
 
             findPreference<Preference>("advanced")?.setOnPreferenceClickListener {
-                Log.i("tagg", "advanced clickeadisimo")
                 fragmentManager?.beginTransaction()
                     ?.replace(R.id.content2, AdvancedSettingsActivity())
                     ?.addToBackStack(null)
