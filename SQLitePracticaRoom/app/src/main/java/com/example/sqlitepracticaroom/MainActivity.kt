@@ -14,6 +14,11 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
     lateinit var closeButton: Button
@@ -21,13 +26,15 @@ class MainActivity : AppCompatActivity() {
     lateinit var editUsername: EditText
     lateinit var editPassword: EditText
     var checkExternalStorage = false
+    lateinit var miRoomDb: AppDatabase
+    lateinit var userDao: UserDao
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        closeButton = findViewById<Button>(R.id.close)
+        closeButton = findViewById(R.id.close)
         loginButton = findViewById(R.id.login)
         editUsername = findViewById(R.id.editUsername)
         editPassword = findViewById(R.id.editPassword)
@@ -35,7 +42,8 @@ class MainActivity : AppCompatActivity() {
         val actionBar: ActionBar? = supportActionBar
         actionBar?.title = "SQLite"
 
-
+        miRoomDb = AppDatabase.getDatabase(this)
+        userDao = miRoomDb.userDao()
 
         closeButton.setOnClickListener {
             finish()
@@ -43,7 +51,28 @@ class MainActivity : AppCompatActivity() {
         }
 
         loginButton.setOnClickListener {
-            login()
+            var response: User? = null
+
+            CoroutineScope(Dispatchers.IO).launch {
+                response =
+                    userDao.getUser(editUsername.text.toString(), editPassword.text.toString())
+
+                // El código a continuación se ejecutará después de obtener la respuesta de la base de datos
+                withContext(Dispatchers.Main) {
+                    if (response != null) {
+                        intent = Intent(this@MainActivity, UserDataActivity::class.java)
+                        intent.putExtra("USERNAME", response!!.username)
+                        intent.putExtra("NOMBRECOMPLETO", response!!.fullname)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(
+                            this@MainActivity,
+                            "Usuario o contraseña incorrectos",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+                }
+            }
         }
 
 

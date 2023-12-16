@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.ArrayAdapter
@@ -17,16 +18,24 @@ import android.widget.Spinner
 import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class UserManagerActivity : AppCompatActivity() {
-    var usuarios: MutableList<String> = mutableListOf()
+    var usuarios: MutableList<User> = mutableListOf()
     lateinit var spinner: Spinner
-
+    lateinit var miRoomDb: AppDatabase
+    lateinit var userDao: UserDao
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user_manager)
 
-        actionBar?.title = "User Manageement"
+        miRoomDb = AppDatabase.getDatabase(this)
+        userDao = miRoomDb.userDao()
+
+        actionBar?.title = "User Management"
 
         val newUserButton = findViewById<Button>(R.id.newUserButton)
         val updateUserButton = findViewById<Button>(R.id.updateUserButton)
@@ -43,22 +52,31 @@ class UserManagerActivity : AppCompatActivity() {
 
         updateUserButton.setOnClickListener {
             intent = Intent(this, UpdateUserActivity::class.java)
-            intent.putExtra("USERNAME", spinner.selectedItem.toString())
+            intent.putExtra("USERID", usuarios[spinner.selectedItemPosition].id)
             startActivity(intent)
         }
 
 
         deleteUserButton.setOnClickListener {
             val usuarioSeleccionado = spinner.selectedItem.toString()
+            val indiceSeleccionado = spinner.selectedItemPosition
 
             AlertDialog.Builder(this)
                 .setTitle("Confirmación")
                 .setMessage("¿Estás seguro de que deseas eliminar al usuario $usuarioSeleccionado?")
                 .setPositiveButton("Eliminar") { dialog, which ->
-                    /*val deleteQuery = "DELETE FROM ${DatabaseHelper.TABLE_NAME} WHERE ${DatabaseHelper.COLUMN_NOMBRE} = '$usuarioSeleccionado'"
-                    db.execSQL(deleteQuery)
-                    usuarios.remove(usuarioSeleccionado)*/
-                    (spinner.adapter as ArrayAdapter<*>).notifyDataSetChanged()
+                    CoroutineScope(Dispatchers.IO).launch {
+                        userDao.deleteUser(usuarios[indiceSeleccionado])
+                        usuarios.removeAt(indiceSeleccionado)
+                        val nombresDeUsuarios: List<String> = usuarios.map { it.username ?: "" }
+                        Log.i("tagg", usuarios.toString())
+
+                        runOnUiThread {
+                            (spinner.adapter as ArrayAdapter<*>).clear()
+                            val adapter = ArrayAdapter(this@UserManagerActivity, android.R.layout.simple_spinner_item, usuarios.map { it.username ?: "" })
+                            spinner.adapter = adapter
+                        }
+                    }
                 }
                 .setNegativeButton("Cancelar", null)
                 .show()
@@ -79,15 +97,25 @@ class UserManagerActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
         usuarios = mutableListOf()
-        cargarUsuarios()
+        CoroutineScope(Dispatchers.IO).launch {
+            usuarios = userDao.getUsers().toMutableList()
 
-        spinner = findViewById(R.id.selectUser)
-        val adapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, usuarios)
-        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        spinner.adapter = adapter
+            withContext(Dispatchers.Main) {
+                spinner = findViewById(R.id.selectUser)
+                val adapter = ArrayAdapter(this@UserManagerActivity, android.R.layout.simple_spinner_item, usuarios.map { it.username ?: "" })
+                adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = adapter
+            }
+        }
+
 
     }
 
     fun cargarUsuarios(){
+
+        CoroutineScope(Dispatchers.IO).launch {
+            usuarios = userDao.getUsers().toMutableList()
+        }
+
     }
 }
