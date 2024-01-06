@@ -148,7 +148,6 @@ public class MainActivity extends AppCompatActivity {
         File outputFile = null;
         try {
 
-            //create output directory if it doesn't exist
             File dir = new File (outputPath);
             if (!dir.exists())
             {
@@ -168,12 +167,10 @@ public class MainActivity extends AppCompatActivity {
             in.close();
             in = null;
 
-            // write the output file
             out.flush();
             out.close();
             out = null;
 
-            // delete the original file
             new File(inputPath + inputFile).delete();
 
 

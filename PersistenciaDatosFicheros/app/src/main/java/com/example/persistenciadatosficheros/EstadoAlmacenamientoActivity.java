@@ -53,7 +53,6 @@ public class EstadoAlmacenamientoActivity extends AppCompatActivity {
         }
 
 
-        // Ruta del directorio raíz (Root)
         String rootDir = Environment.getRootDirectory().getPath();
         info.setText(info.getText() + "Root Dir: " + rootDir);
 
