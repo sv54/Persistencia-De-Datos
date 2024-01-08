@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -19,6 +20,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import kotlinx.coroutines.withContext
+import java.io.File
+import java.io.FileInputStream
+import java.io.FileOutputStream
+import java.io.IOException
 
 class MainActivity : AppCompatActivity() {
     lateinit var closeButton: Button
@@ -28,6 +33,9 @@ class MainActivity : AppCompatActivity() {
     var checkExternalStorage = false
     lateinit var miRoomDb: AppDatabase
     lateinit var userDao: UserDao
+
+    val DATABASE_NAME = "miRoomdb"
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -57,7 +65,6 @@ class MainActivity : AppCompatActivity() {
                 response =
                     userDao.getUser(editUsername.text.toString(), editPassword.text.toString())
 
-                // El código a continuación se ejecutará después de obtener la respuesta de la base de datos
                 withContext(Dispatchers.Main) {
                     if (response != null) {
                         intent = Intent(this@MainActivity, UserDataActivity::class.java)
@@ -95,13 +102,13 @@ class MainActivity : AppCompatActivity() {
             R.id.action_createBackUp -> {
 
                 // Realizar operaciones en la base de datos (ejemplo: insertar un usuario)
-                /*if (checkPermisos()){
-                    if (dbHelper.backupDatabase()) {
+                if (checkPermisos()){
+                    if (backupDatabase()) {
                         Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
                     }
-                }*/
+                }
                 // Realizar el respaldo de la base de datos
 
                 return true
@@ -111,12 +118,12 @@ class MainActivity : AppCompatActivity() {
 
 //                    insertarUsuario(db, "Restoring", "123456", "Nombre Completo", "usuario@dominio.com")
 
-                    /*if (dbHelper.restoreDatabase()) {
+                    if (restoreDatabase()) {
 
                         Toast.makeText(this, "Restore exitoso", Toast.LENGTH_SHORT).show()
                     } else {
                         Toast.makeText(this, "Error al realizar el restore", Toast.LENGTH_SHORT).show()
-                    }*/
+                    }
                 }
                 return true
             }
@@ -136,7 +143,7 @@ class MainActivity : AppCompatActivity() {
     protected fun checkPermisos(): Boolean {
         return if (Build.VERSION.SDK_INT >= 30) {
             if (Environment.isExternalStorageManager() == false) {
-                val uri = Uri.parse("package:" + "com.example.sqlitepractica")
+                val uri = Uri.parse("package:" + "com.example.sqlitepracticaroom")
                 startActivity(Intent(Settings.ACTION_MANAGE_APP_ALL_FILES_ACCESS_PERMISSION, uri))
                 checkExternalStorage = true
                 false
@@ -155,6 +162,43 @@ class MainActivity : AppCompatActivity() {
                     //moverAInternal();
                 }
             }
+        }
+    }
+    fun backupDatabase(): Boolean {
+        val currentDBPath = this.getDatabasePath(DATABASE_NAME).absolutePath
+        val backupDBPath = File(this.getExternalFilesDir(null), DATABASE_NAME)
+
+        try {
+            val src = FileInputStream(currentDBPath).channel
+            val dst = FileOutputStream(backupDBPath).channel
+            dst.transferFrom(src, 0, src.size())
+            src.close()
+            dst.close()
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            return false
+        }
+    }
+
+    fun restoreDatabase(): Boolean {
+        val externalFile = File(this.getExternalFilesDir(null), DATABASE_NAME)
+        val internalFile = this.getDatabasePath(DATABASE_NAME)
+        Log.i("tagg", this.getExternalFilesDir(null)!!.path)
+        Log.i("tagg", this.getDatabasePath(DATABASE_NAME).path)
+
+
+        try {
+            val src = FileInputStream(externalFile).channel
+            val dst = FileOutputStream(internalFile).channel
+            dst.transferFrom(src, 0, src.size())
+            src.close()
+            dst.close()
+            return true
+        } catch (e: IOException) {
+            e.printStackTrace()
+            // Error al copiar el archivo
+            return false
         }
     }
 }

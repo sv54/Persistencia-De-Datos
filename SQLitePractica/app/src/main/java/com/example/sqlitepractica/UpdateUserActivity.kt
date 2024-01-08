@@ -63,8 +63,6 @@ class UpdateUserActivity : AppCompatActivity() {
             finish()
         } else {
             Toast.makeText(this, "Error al hacer update :(", Toast.LENGTH_SHORT).show()
-
-            // No se pudo realizar la actualización
         }
     }
 
@@ -102,7 +100,7 @@ class UpdateUserActivity : AppCompatActivity() {
         }
     }
 
-    // Llamar a esta función en tu actividad para ocultar el teclado al tocar fuera de los campos de entrada
+    // Ocultrar teclado
     override fun onTouchEvent(event: MotionEvent): Boolean {
         ocultarTecladoEnToqueExterno()
         return super.onTouchEvent(event)

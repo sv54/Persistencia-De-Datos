@@ -62,7 +62,6 @@ class NewUserActivity : AppCompatActivity() {
     }
 
     private fun insertarUsuario(db: SQLiteDatabase, nombreUsuario: String, password: String, nombreCompleto: String) {
-        // Crear un ContentValues con los valores a insertar
         val values = ContentValues().apply {
             put(DatabaseHelper.COLUMN_NOMBRE, nombreUsuario)
             put(DatabaseHelper.COLUMN_PASSWORD, password)
@@ -70,7 +69,6 @@ class NewUserActivity : AppCompatActivity() {
             put(DatabaseHelper.COLUMN_EMAIL, "sin email")
         }
 
-        // Insertar el nuevo usuario en la tabla
         db.insert(DatabaseHelper.TABLE_NAME, null, values)
     }
 }

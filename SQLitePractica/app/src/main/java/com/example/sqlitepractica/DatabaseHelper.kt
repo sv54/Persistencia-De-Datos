@@ -3,7 +3,6 @@ package com.example.sqlitepractica
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.os.Environment
 import android.util.Log
 import android.widget.Toast
 import java.io.File
@@ -20,7 +19,6 @@ class DatabaseHelper(private val context: Context) : SQLiteOpenHelper(context, D
         const val DATABASE_NAME = "midb"
         const val DATABASE_VERSION = 1
 
-        // Define la estructura de la tabla y las consultas SQL
         const val TABLE_NAME = "Usuarios"
         const val COLUMN_ID = "ID"
         const val COLUMN_NOMBRE = "nombre_usuario"

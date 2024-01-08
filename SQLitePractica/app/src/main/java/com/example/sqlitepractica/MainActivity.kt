@@ -1,6 +1,5 @@
 package com.example.sqlitepractica
 
-import android.content.ContentValues
 import android.content.Intent
 import android.database.sqlite.SQLiteDatabase
 import android.net.Uri
@@ -8,7 +7,6 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.Settings
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Button
@@ -80,7 +78,6 @@ class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Error usuario/password incorrectos", Toast.LENGTH_SHORT).show()
             }
         } finally {
-            // Cerrar el cursor después de usarlo
             cursor.close()
         }
 
@@ -98,7 +95,6 @@ class MainActivity : AppCompatActivity() {
         when (item.itemId) {
             R.id.action_createBackUp -> {
 
-                // Realizar operaciones en la base de datos (ejemplo: insertar un usuario)
                 if (checkPermisos()){
                     if (dbHelper.backupDatabase()) {
                         Toast.makeText(this, "Backup exitoso", Toast.LENGTH_SHORT).show()
@@ -106,14 +102,11 @@ class MainActivity : AppCompatActivity() {
                         Toast.makeText(this, "Error al realizar el backup", Toast.LENGTH_SHORT).show()
                     }
                 }
-                // Realizar el respaldo de la base de datos
 
                 return true
             }
             R.id.action_restoreBackUp -> {
                 if (checkPermisos()){
-
-//                    insertarUsuario(db, "Restoring", "123456", "Nombre Completo", "usuario@dominio.com")
 
                     if (dbHelper.restoreDatabase()) {
 
@@ -125,14 +118,10 @@ class MainActivity : AppCompatActivity() {
                 return true
             }
             R.id.action_ManageUsers -> {
-//                insertarUsuario(db, "AntesDeRestore", "123456", "Nombre Completo", "usuario@dominio.com")
                 intent = Intent(this, UserManagerActivity::class.java)
                 startActivity(intent)
                 return true
             }
-            /*android.R.id.home -> {
-                return true
-            }*/
             else -> return super.onOptionsItemSelected(item)
         }
     }
@@ -156,7 +145,6 @@ class MainActivity : AppCompatActivity() {
             if (checkExternalStorage) {
                 checkExternalStorage = false
                 if (Environment.isExternalStorageManager()) {
-                    //moverAInternal();
                 }
             }
         }
