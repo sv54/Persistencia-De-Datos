@@ -1,0 +1,3 @@
+Ej1: 0.25 Hecho (Probar SimSim y guardar archivo de texto)
+Ej2: 0.5 (Crear Property List)
+Ej3: 0.75 (Preferences)
