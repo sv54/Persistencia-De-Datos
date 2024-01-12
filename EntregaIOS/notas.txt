@@ -1,3 +1,14 @@
+--Sesion 1 No presencia--
 Ej1: 0.25 Hecho (Probar SimSim y guardar archivo de texto)
-Ej2: 0.5 (Crear Property List)
-Ej3: 0.75 (Preferences)
+Ej2: 0.5 Hecho (Crear Property List)
+Ej3: 0.75 Hecho(Preferences)
+
+--Sesion 2 Presencial
+Core Data
+Ej 0.5 Hecho (CoreData introducción)
+
+Modelos de datos
+Ej1: 0,25 Añadir entidad Libreta
+Ej2: 0,25 Crear libretas
+Ej3: 0,25 Listar libretas
+Ej4: 0,25 Asociar una libreta a la nota actual
