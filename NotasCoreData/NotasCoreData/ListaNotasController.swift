@@ -61,7 +61,7 @@ class ListaNotasController: UITableViewController, UISearchResultsUpdating {
         let notas = try! miContexto.fetch(request)
         listaNotas = try! miContexto.fetch(request)
         for nota in notas {
-           print(nota.texto!)
+           print(nota.contenido!)
         }
         self.tableView.reloadData()
     }
@@ -73,7 +73,7 @@ class ListaNotasController: UITableViewController, UISearchResultsUpdating {
             let miDelegate = UIApplication.shared.delegate as! AppDelegate
             let miContexto = miDelegate.persistentContainer.viewContext
             let request = Nota.fetchRequest()
-            let pred = NSPredicate(format: "texto CONTAINS[c] %@",textoBusqueda)
+            let pred = NSPredicate(format: "contenido CONTAINS[c] %@",textoBusqueda)
             request.predicate = pred
             let resultados = try! miContexto.fetch(request)
             
@@ -98,7 +98,7 @@ class ListaNotasController: UITableViewController, UISearchResultsUpdating {
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MiCelda", for: indexPath)
-        cell.textLabel?.text = self.listaNotas[indexPath.row].texto as? String
+        cell.textLabel?.text = self.listaNotas[indexPath.row].contenido as? String
         cell.detailTextLabel?.text = self.listaNotas[indexPath.row].libreta?.nombre as? String
         // Configure the cell...
 
