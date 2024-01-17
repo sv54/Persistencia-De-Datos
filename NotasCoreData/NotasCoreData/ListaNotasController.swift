@@ -8,11 +8,28 @@
 import UIKit
 import CoreData
 
-class ListaNotasController: UITableViewController {
+class ListaNotasController: UITableViewController, UISearchResultsUpdating {
     var listaNotas : [Nota]!
+    let throttler = Throttler(minimumDelay: 0.5)
 
+    //esto debe ser una variable miembro de ListaNotasController
+    let searchController = UISearchController(searchResultsController: nil)
+
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+
+        
+        //iOS intentará pintar la tabla, hay que inicializarla aunque sea vacía
+        self.listaNotas = []
+        //ListaNotasController recibirá lo que se está escribiendo en la barra de búsqueda
+        searchController.searchResultsUpdater = self
+        //Configuramos el search controller
+        searchController.obscuresBackgroundDuringPresentation = false
+        searchController.searchBar.placeholder = "Buscar texto"
+        //Lo añadimos a la tabla
+        searchController.searchBar.sizeToFit()
+        self.tableView.tableHeaderView = searchController.searchBar
 
         /*
         let queryLibretas = NSFetchRequest<Libreta>(entityName:"Libreta")
@@ -47,6 +64,23 @@ class ListaNotasController: UITableViewController {
            print(nota.texto!)
         }
         self.tableView.reloadData()
+    }
+
+    func updateSearchResults(for searchController: UISearchController) {
+        throttler.throttle {
+            let textoBusqueda = searchController.searchBar.text!
+            print("Buscando \(textoBusqueda)")
+            let miDelegate = UIApplication.shared.delegate as! AppDelegate
+            let miContexto = miDelegate.persistentContainer.viewContext
+            let request = Nota.fetchRequest()
+            let pred = NSPredicate(format: "texto CONTAINS[c] %@",textoBusqueda)
+            request.predicate = pred
+            let resultados = try! miContexto.fetch(request)
+            
+            self.listaNotas = resultados
+            self.tableView.reloadData()
+        }
+
     }
 
     // MARK: - Table view data source

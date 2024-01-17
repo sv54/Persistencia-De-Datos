@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		C7AD4E962B58362D001C882F /* Throttler.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AD4E952B58362D001C882F /* Throttler.swift */; };
+		C7AD4E982B58381E001C882F /* ListaNotasCDController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AD4E972B58381E001C882F /* ListaNotasCDController.swift */; };
+		C7AD4E9A2B584082001C882F /* Nota+Custom.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7AD4E992B584082001C882F /* Nota+Custom.swift */; };
 		C7B3E1232B5196A100C4C006 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3E1222B5196A100C4C006 /* AppDelegate.swift */; };
 		C7B3E1252B5196A100C4C006 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3E1242B5196A100C4C006 /* SceneDelegate.swift */; };
 		C7B3E1272B5196A100C4C006 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = C7B3E1262B5196A100C4C006 /* ViewController.swift */; };
@@ -19,6 +22,9 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		C7AD4E952B58362D001C882F /* Throttler.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Throttler.swift; sourceTree = "<group>"; };
+		C7AD4E972B58381E001C882F /* ListaNotasCDController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListaNotasCDController.swift; sourceTree = "<group>"; };
+		C7AD4E992B584082001C882F /* Nota+Custom.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Nota+Custom.swift"; sourceTree = "<group>"; };
 		C7B3E11F2B5196A100C4C006 /* NotasCoreData.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = NotasCoreData.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		C7B3E1222B5196A100C4C006 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		C7B3E1242B5196A100C4C006 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -72,6 +78,9 @@
 				C7B3E1332B5196A800C4C006 /* Info.plist */,
 				C7B3E12B2B5196A100C4C006 /* NotasCoreData.xcdatamodeld */,
 				C7B3E13D2B51AAB600C4C006 /* GestorPicker.swift */,
+				C7AD4E952B58362D001C882F /* Throttler.swift */,
+				C7AD4E972B58381E001C882F /* ListaNotasCDController.swift */,
+				C7AD4E992B584082001C882F /* Nota+Custom.swift */,
 			);
 			path = NotasCoreData;
 			sourceTree = "<group>";
@@ -149,7 +158,10 @@
 			files = (
 				C7B3E1272B5196A100C4C006 /* ViewController.swift in Sources */,
 				C7B3E1232B5196A100C4C006 /* AppDelegate.swift in Sources */,
+				C7AD4E962B58362D001C882F /* Throttler.swift in Sources */,
 				C7B3E13C2B51A24100C4C006 /* ListaNotasController.swift in Sources */,
+				C7AD4E982B58381E001C882F /* ListaNotasCDController.swift in Sources */,
+				C7AD4E9A2B584082001C882F /* Nota+Custom.swift in Sources */,
 				C7B3E12D2B5196A100C4C006 /* NotasCoreData.xcdatamodeld in Sources */,
 				C7B3E1252B5196A100C4C006 /* SceneDelegate.swift in Sources */,
 				C7B3E13E2B51AAB600C4C006 /* GestorPicker.swift in Sources */,
