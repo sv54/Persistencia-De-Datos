@@ -15,20 +15,22 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
         let miContexto = miDelegate.persistentContainer.viewContext
         
         if let pedidoActual = StateSingleton.shared.pedidoActual {
-            // Asigna la fecha actual al pedido
             pedidoActual.fecha = Date()
             
-            // Guarda el contexto para persistir los cambios
+
             do {
                 try miContexto.save()
-                // Crea un nuevo pedido en StateSingleton.shared.pedidoActual
+
                 StateSingleton.shared.pedidoActual = Pedido(context: miContexto)
-                // Muestra un mensaje al usuario
+
                 print("¡Pedido realizado! Su pedido está en camino.")
             } catch {
-                // Maneja los errores de guardado aquí
+
                 print("Error al realizar el pedido en Core Data: \(error)")
+                
             }
+            mostrarAlerta("Pedido Realizado!", mensaje: "Su pedido está en camino")
+            tabla.reloadData()
         }
     }
     
@@ -39,21 +41,31 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
         let miContexto = miDelegate.persistentContainer.viewContext
         
         if let pedidoActual = StateSingleton.shared.pedidoActual {
-            // Elimina el pedido actual y sus líneas de pedido
+
             miContexto.delete(pedidoActual)
 
-            // Guarda el contexto para persistir los cambios
+
             do {
                 try miContexto.save()
-                // Crea un nuevo pedido en StateSingleton.shared.pedidoActual
+
                 StateSingleton.shared.pedidoActual = Pedido(context: miContexto)
-                // Muestra un mensaje al usuario
+
                 print("Pedido cancelado.")
             } catch {
-                // Maneja los errores de guardado aquí
+
                 print("Error al cancelar el pedido en Core Data: \(error)")
             }
+            
+            tabla.reloadData()
+            mostrarAlerta("Pedido cancelado", mensaje: "Se ha cancelado vuestro pedido")
         }
+    }
+    
+    func mostrarAlerta(_ titulo: String, mensaje: String) {
+        let alertController = UIAlertController(title: titulo, message: mensaje, preferredStyle: .alert)
+        let okAction = UIAlertAction(title: "OK", style: .default, handler: nil)
+        alertController.addAction(okAction)
+        present(alertController, animated: true, completion: nil)
     }
     
     //TODO: descomentar esta línea!!!!
@@ -79,24 +91,21 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
         do {
             try miContexto.save()
         } catch {
-            // Maneja los errores de guardado aquí
             print("Error al guardar el nuevo pedido en Core Data: \(error)")
         }
         
         if let pedidoActual = StateSingleton.shared.pedidoActual, let platoElegido = platoElegido {
-            // Crea una nueva línea de pedido
+
             let nuevaLineaPedido = LineaPedido(context: miContexto)
             nuevaLineaPedido.cantidad = 1
             nuevaLineaPedido.plato = platoElegido
             nuevaLineaPedido.pedido = pedidoActual
             platoElegido.addToLineasPedido(nuevaLineaPedido)
-            // Guarda el contexto para persistir la nueva línea de pedido
             
 
         do {
             try miContexto.save()
             } catch {
-                // Maneja los errores de guardado aquí
                 print("Error al guardar la nueva línea de pedido en Core Data: \(error)")
             }
         }
@@ -107,7 +116,6 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
     
     override func viewWillAppear(_ animated: Bool) {
         self.tabla.reloadData()
-        //print(platoElegido.lineasPedido?.count, ": num lineas pedido")
     }
     
 
@@ -120,7 +128,6 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let celda = tableView.dequeueReusableCell(withIdentifier: "celdaLinea", for: indexPath) as! LineaPedidoTableViewCell
-        //Necesario para que funcione el delegate
         celda.pos = indexPath.row
         celda.delegate = self
         
@@ -152,7 +159,6 @@ class PedidoActualViewController: UIViewController, UITableViewDataSource, Linea
         do {
             try miContexto.save()
         } catch {
-            // Maneja los errores de guardado aquí
             print("Error al guardar la nueva línea de pedido en Core Data: \(error)")
         }
         

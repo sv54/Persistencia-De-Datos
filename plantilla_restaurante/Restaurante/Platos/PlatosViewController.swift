@@ -27,7 +27,7 @@ class PlatosViewController: UIViewController, UITableViewDataSource, PlatoTableV
         consulta.sortDescriptors = sortDescriptors
         self.frc = NSFetchedResultsController<Plato>(fetchRequest: consulta, managedObjectContext: miContexto, sectionNameKeyPath: "tipo", cacheName: nil)
 
-        //ejecutamos el fetch
+        
         try! self.frc.performFetch()
         
         self.searchController = UISearchController(searchResultsController: nil)
