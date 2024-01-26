@@ -1,3 +1,4 @@
 Ej1: 0.25 Hecho (Probar SimSim y guardar archivo de texto)
-Ej2: 0.5 (Crear Property List)
-Ej3: 0.75 (Preferences)
+Ej2: 0.5 Hecho (Crear Property List)
+Ej3: 0.75 Hecho (Preferences)
+Sesion 1 --> 1.5 puntos
